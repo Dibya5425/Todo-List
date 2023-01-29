@@ -1,0 +1,174 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>to-do-List</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+        <style>
+            #midcontainer{
+                width: 700px;
+                height: 450;
+                margin: 70px auto;
+                border: 2px solid rgb(125, 181, 66);
+                background-color: rgb(247, 248, 234);
+            }
+            body{
+                background-color: azure;
+            }
+            #inside{
+                color: rgb(125, 181, 66);
+                text-align: center;
+            }
+            
+            #outside{
+                color: rgb(38, 72, 120);
+                text-align: center;
+            }
+            #project{
+                width: 650px;
+                height: 250px;
+                margin: 0px auto;
+            }
+            ol li{
+                border: 1px dotted black;
+                cursor: pointer;
+                padding: 5px;
+                margin-bottom: 5px;
+            }
+            ol li:hover{
+                background-color: #6eb7d6;
+            }
+            #btnAddProject{
+                margin-left: 550px;
+                margin-bottom: 5px;
+                padding: 5px;
+                
+            }
+            #btnAddTask{
+                margin-left: 590px;
+                margin-top: 5px;
+                padding: 5px;
+            }
+            .ui-icon-close{
+                transform: scale(1.2);
+                cursor: pointer;  
+            }
+            
+        </style>
+
+        <script>
+            $(document).ready(function(){
+                $("input[type=checkedbox]").removeAttr("checked");
+                $("#project").tabs();
+                $("ul").sortable({axis:"x", containment:"#project" });
+                $("ol").sortable({axis:"y", containment:"#project"});
+                $("#project").on("click", "input[type=checkbox]", function(){   //event deligation (here we have deligated the responsibilities, intut[type=xheckbox] is a child object of project ID.)
+                    $(this).closest("li").slideUp(function(){
+                        $(this).remove();
+                    });
+                    $("#project").on("click", "span.ui-icon-close", function () {
+                        var index = $(this).closest("li").index();
+                        var id = $("#main li :eq(" + index + ") a").attr("href");
+                        $("#main li:eq("+ index + ")").remove();
+                        $(id).remove();
+                        $("#projects").tabs("refresh")
+                    });
+                });
+                $("#btnAddTask").button().click(function () {
+                    $("#task").dialog({width:400, resizable:false, modal:true, 
+                        buttons:{
+                                "Add new task": function(){
+                                    $("#project").tabs("refresh");
+                                    var activeTab = $("#project").tabs("option", "active");
+                                    var title = $("#main > li:nth-child(" + (activeTab+1) +") > a").attr("href");
+                                    $(title).append("<li><input type='checkbox'>" + $("#new-task").val() + "</li>");
+                                    $("#new-task").val("");
+                                    $(this).dialog("close");
+                                },
+                                "cancel": function(){
+                                    $("#new-task").val("");
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+                    });
+                $("#btnAddProject").button().click(function (){
+                    $("#cat").dialog({width:400, resizable:false, modal:true,
+                        buttons:{
+                            "Add new Project":function(){
+                                var projectName = $("#new-project").val();
+                                var replaceName = projectName.split(" ").join("_");
+                                $("<li><a href=' #" + replaceName + " '>" + projectName + "</a><span class='ui-icon ui-icon-close'></li>").appendTo("#main");
+                                $("<ol id='" + replaceName +"'></ol>").appendTo("#project").sortable();
+                                $("#project").tabs("refresh");
+                                var tabCount = $("project .ui-tabs-nav li").length;
+                                $("#project").tabs("option", "active", tabCount-1);
+                                $("#new-project").val("");
+                                $(this).dialog("close");
+                            }, 
+                            "Cancel":function(){
+                                $("#new-project").val("");
+                                $(this).dialog("close");
+                            }
+                        }
+                    });   
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="outercontainer">
+            <div id="uppercontainer">
+                    <h2 id="outside">Add your tasks,<br>
+                    Organize your life,<br>
+                    Achieve more every day.</h2><br>
+            </div>
+            <div id="midcontainer">
+                <h2 id="inside">To Do List</h2>
+                <button id="btnAddProject">Add Category</button>
+                <div id="project">
+                    <ul id="main">
+                        <li><a href="#personal">Personal</a><span class="ui-icon ui-icon-close"></span></li>
+                        <!-- <li><a href="#work">Work</a><span class="ui-icon ui-icon-close"></span></li> -->
+                    <!-- <li><a href="#family">Family</a></li>
+                        <li><a href="#study">Study</a></li> -->
+                    </ul>
+                    <ol id="personal">
+                        
+                        <li><input type="checkbox">Launch a new home page</li>
+                        
+                    </ol>
+                    <!-- <ol id="Work">
+                        <li><input type="checkbox">Complete test case document</li>
+                        <li><input type="checkbox">Meet project manager</li>
+                    </ol> -->
+                <!--<ol id="family">
+                        <li><input type="checkbox">Dinner Outside</li>
+                        
+                        
+                    </ol>
+                    <ol id="Study">
+                        <li><input type="checkbox">Complete lecture of REACT JS</li>
+                        
+                    </ol>    --> 
+                </div>
+                <button id="btnAddTask">Add Task</button>
+
+                <div id="cat" style="display:none;" title="Add new Category">
+                    <label for="new-project">Category name: <input id="new-project" type="text" /></label>
+                </div>
+                <div id="task" style="display:none;" title="Add new Category">
+                    <label for="new-task">Task name: <input id="new-task" type="text" /></label>
+                </div>
+            </div>
+            <div id="endcontainer">
+                <h2 id="outside">"Todo list makes it easy to go as simple or as complex as you want."</h2>
+            </div> 
+        </div>
+    
+    </body>
+</html> 
