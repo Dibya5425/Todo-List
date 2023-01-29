@@ -99,7 +99,7 @@
                 $("#btnAddProject").button().click(function (){
                     $("#cat").dialog({width:400, resizable:false, modal:true,
                         buttons:{
-                            "Add new Project":function(){
+                            "Add new Category":function(){
                                 var projectName = $("#new-project").val();
                                 var replaceName = projectName.split(" ").join("_");
                                 $("<li><a href=' #" + replaceName + " '>" + projectName + "</a><span class='ui-icon ui-icon-close'></li>").appendTo("#main");
@@ -139,7 +139,7 @@
                     </ul>
                     <ol id="personal">
                         
-                        <li><input type="checkbox">Launch a new home page</li>
+                   <!--     <li><input type="checkbox">Launch a new home page</li> -->
                         
                     </ol>
                     <!-- <ol id="Work">
