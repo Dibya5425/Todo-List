@@ -7,3 +7,4 @@ In this app we can sort our list of task as category wise. we can also add multi
 _Add your tasks, Organize your life, Achieve more every day._
   
   
+![My Video (1) (1) (1)](https://user-images.githubusercontent.com/75841470/215615187-baf14c56-aaea-44cd-ae77-0eec555e78aa.gif)
